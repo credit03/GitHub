@@ -3,7 +3,10 @@
 ## 参考GithubTrends开发https://github.com/laowch/GithubTrends
 ## 使用RxJava2+Retrofit2+Rxbus2等热门技术整合开发
 
+##[Demo下载](https://raw.githubusercontent.com/credit03/GitHub/master/app/app-release.apk)
+
  ![image](https://github.com/credit03/GitHub/blob/master/screenshot/1.png)
+ 
  ![image](https://github.com/credit03/GitHub/blob/master/screenshot/2.png)
  
  ## 喜欢的可以收藏
