@@ -1,0 +1,227 @@
+package com.guoyi.github.ui;
+
+import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.guoyi.github.R;
+import com.guoyi.github.adapter.LanguageFragmentAdapter;
+import com.guoyi.github.ui.fragment.GithubFargment;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+public class MainActivity extends BaseAcitvity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
+    @InjectView(R.id.sliding_tabs)
+    TabLayout slidingTabs;
+    @InjectView(R.id.view_pager)
+    ViewPager viewPager;
+    @InjectView(R.id.nav_view)
+    NavigationView navView;
+    @InjectView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+
+
+    private ActionBarDrawerToggle toggle;
+    private View spinnerContainer;
+    private Spinner spinner;
+
+
+    private String mTimeSpan = "daily";
+
+    private LanguageFragmentAdapter<GithubFargment> mPagerAdapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
+        initView();
+        initValue();
+        initEvent();
+
+    }
+
+
+    private void initView() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+
+        toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+        navView = (NavigationView) findViewById(R.id.nav_view);
+
+        spinnerContainer = LayoutInflater.from(this).inflate(R.layout.toolbar_spinner,
+                toolbar, false);
+
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        slidingTabs = (TabLayout) findViewById(R.id.sliding_tabs);
+
+    }
+
+    private void initValue() {
+
+        this.getSupportActionBar().setDisplayShowTitleEnabled(false);
+        navView.setNavigationItemSelectedListener(this);
+
+
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        toolbar.addView(spinnerContainer, lp);
+
+        SinceSpinnerAdapter spinnerAdapter = new SinceSpinnerAdapter();
+
+        spinner = (Spinner) spinnerContainer.findViewById(R.id.toolbar_spinner);
+        spinner.setAdapter(spinnerAdapter);
+
+        mPagerAdapter = new LanguageFragmentAdapter<>(getSupportFragmentManager(), this, mTimeSpan);
+
+        this.viewPager.setAdapter(mPagerAdapter);
+
+        slidingTabs.setupWithViewPager(viewPager);
+
+    }
+
+
+    public void initEvent() {
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                switch (position) {
+                    case 0: // daily
+                        mTimeSpan = "daily";
+                        break;
+                    case 1: // weekly
+                        mTimeSpan = "weekly";
+                        break;
+                    case 2: // monthly
+                        mTimeSpan = "monthly";
+                        break;
+                }
+                mPagerAdapter.updateSpanOrder(mTimeSpan);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_favos:
+                break;
+            case R.id.action_custom:
+                break;
+            case R.id.action_add:
+                break;
+            case R.id.action_remove:
+                break;
+            case R.id.action_theme:
+                ThemeDialog dialog = new ThemeDialog();
+                dialog.show(getSupportFragmentManager(), "theme");
+                break;
+            case R.id.action_about:
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+    public class SinceSpinnerAdapter extends BaseAdapter {
+
+        final String[] timeSpanTextArray = new String[]{"日排行", "周排行", "月排行"};
+
+        @Override
+        public int getCount() {
+            return timeSpanTextArray.length;
+        }
+
+        @Override
+        public String getItem(int position) {
+            return timeSpanTextArray[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = convertView != null ? convertView :
+                    getLayoutInflater().inflate(R.layout.toolbar_spinner_item_actionbar, parent, false);
+
+            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+            textView.setText(getItem(position));
+            return view;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+
+            View view = convertView != null ? convertView :
+                    getLayoutInflater().inflate(R.layout.toolbar_spinner_item_dropdown, parent, false);
+
+            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+            textView.setText(getItem(position));
+
+            return view;
+        }
+    }
+}

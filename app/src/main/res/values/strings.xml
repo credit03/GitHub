@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Github100</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">设置</string>
+    <string name="action_down">下载项目</string>
+    <string name="action_share">分享</string>
+    <string name="home">主页</string>
+    <string name="favorites">收藏</string>
+    <string name="languages">语言</string>
+    <string name="custom_language">个性定制</string>
+    <string name="add_language">添加</string>
+    <string name="remove_language">删除</string>
+    <string name="change_theme">切换主题</string>
+    <string name="about">关于</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="about_title">这是一个用来看查看 Github 热门项目的 Android App, 遵循 Material Design设计规范.\n https://github.com/trending</string>
+    <string name="about_desc">当前项目是开源的，参考GithubTrends开发\n 使用RxJava2+Retrofit2+Rxbus2等热门技术整合开发\n
+        bug反馈:creidt_yi@163.com \n
+        QQ：874951370\n
+        Github项目链接 </string>
+    <string name="done">完成</string>
+    <string name="save">保存</string>
+    <string name="open_seb">使用浏览器打开</string>
+    <string name="url_copy">复制URL</string>
+    <string name="done_copy">已复制链接到剪切板</string>
+</resources>
